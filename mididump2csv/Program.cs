@@ -12,6 +12,7 @@ namespace mididump2csv {
             TextReader tr = new StringReader(new StreamReader(input).ReadToEnd());
 
             string line = string.Empty;
+            Console.WriteLine("absoluteTime,event,channel,note,velocity,length"); // csv column names
             while((line = tr.ReadLine()) != null) {
                 line = line
                     .Replace(" Ch: ", " Ch:")
