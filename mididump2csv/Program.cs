@@ -4,26 +4,257 @@ using System.IO;
 namespace mididump2csv {
     class MainClass {
         public static void Main(string[] args) {
-            Stream input = null;
+            StreamTextReader tr;
 
-            if(args.Length > 0) input = File.OpenRead(args[0]);
-            else input = Console.OpenStandardInput();
+            if(args.Length > 0) tr = new StreamTextReader(File.OpenRead(args[0]));
+            else tr = new StreamTextReader(Console.OpenStandardInput());
             
-            TextReader tr = new StringReader(new StreamReader(input).ReadToEnd());
-
-            string line = string.Empty;
             Console.WriteLine("absoluteTime,event,channel,note,velocity,length"); // csv column names
-            while((line = tr.ReadLine()) != null) {
-                line = line
-                    .Replace(" Ch: ", " Ch:")
-                    .Replace(" Len: ", " Len:")
-                    .Replace(" (Note Off)", " (NoteOff)")
-                    .Replace("Bass Drum 1", "BassDrum1")
-                    .Replace("Electric Snare", "ElectricSnare")
-                    .Replace("Closed Hi-Hat", "ClosedHi-Hat")
-                    .Replace("Bright Acoustic", "BrightAcoustic")
-                    .Replace("Acoustic Grand", "AcousticGrand");
-                Console.WriteLine(string.Join(",", line.Split(' ')));
+            string currentLine = null;
+            while((currentLine = tr.ReadLine()) != null) {
+                currentLine = currentLine.Replace(" Ch: ", " Ch:");
+
+                if(currentLine.Contains("NoteOn")) {
+                    currentLine = currentLine
+                        .Replace(" Len: ", " Len:")
+                        .Replace(" (Note Off)", " (NoteOff)")
+                        .Replace("Acoustic Grand", "AcousticGrand")
+                        .Replace("Bright Acoustic", "BrightAcoustic");
+
+                    if(currentLine.Contains("Ch:10")) {
+                        int oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 33", "Drum33");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 34", "Drum34");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Acoustic Bass Drum", "AcousticBassDrum");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Bass Drum 1", "BassDrum1");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Side Stick", "SideStick");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Acoustic Snare", "AcousticSnare");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Hand Clap", "HandClap");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Electric Snare", "ElectricSnare");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Low Floor Tom", "LowFloorTom");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Closed Hi-Hat", "ClosedHi-Hat");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("High Floor Tom", "HighFloorTom");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Pedal Hi-Hat", "PedalHi-Hat");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Low Tom", "LowTom");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Open Hi-Hat", "OpenHi-Hat");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Low-Mid Tom", "Low-MidTom");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Hi-Mid Tom", "Hi-MidTom");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Crash Cymbal 1", "CrashCymbal1");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("High Tom", "HighTom");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Ride Cymbal 1", "RideCymbal1");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Chinese Cymbal", "ChineseCymbal");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Ride Bell", "RideBell");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Tambourine", "Tambourine");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Splash Cymbal", "SplashCymbal");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Cowbell", "Cowbell");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Crash Cymbal 2", "CrashCymbal2");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Vibraslap", "Vibraslap");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Ride Cymbal 2", "RideCymbal2");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Hi Bongo", "HiBongo");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Low Bongo", "LowBongo");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Mute Hi Conga", "MuteHiConga");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Open Hi Conga", "OpenHiConga");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Low Conga", "LowConga");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("High Timbale", "HighTimbale");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Low Timbale", "LowTimbale");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("High Agogo", "HighAgogo");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Low Agogo", "LowAgogo");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Cabasa", "Cabasa");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Maracas", "Maracas");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Short Whistle", "ShortWhistle");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Long Whistle", "LongWhistle");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Short Guiro", "ShortGuiro");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Long Guiro", "LongGuiro");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Claves", "Claves");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Hi Wood Block", "HiWoodBlock");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Low Wood Block", "LowWoodBlock");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Mute Cuica", "MuteCuica");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Open Cuica", "OpenCuica");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Mute Triangle", "MuteTriangle");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Open Triangle", "OpenTriangle");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 82", "Drum82");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 83", "Drum83");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 84", "Drum84");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 85", "Drum85");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 86", "Drum86");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 87", "Drum87");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 88", "Drum88");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 89", "Drum89");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 90", "Drum90");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 91", "Drum91");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 92", "Drum92");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 93", "Drum93");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 94", "Drum94");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 95", "Drum95");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 96", "Drum96");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 97", "Drum97");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 98", "Drum98");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 99", "Drum99");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 100", "Drum100");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 101", "Drum101");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 102", "Drum102");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 103", "Drum103");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 104", "Drum104");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 105", "Drum105");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 106", "Drum106");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 107", "Drum107");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                        oldLen = currentLine.Length;
+                        currentLine = currentLine.Replace("Drum 108", "Drum108");
+                        if(currentLine.Length != oldLen) goto percussionNameFixDone;
+                    }
+                    percussionNameFixDone:;
+                }
+                
+                Console.WriteLine(string.Join(",", currentLine.Split(' ')));
             }
         }
     }
